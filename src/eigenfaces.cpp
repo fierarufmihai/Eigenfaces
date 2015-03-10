@@ -4,7 +4,6 @@
 #include <sstream>
 #include <stdio.h>
 
-#include <boost/tokenizer.hpp>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -12,9 +11,8 @@
 
 using namespace std;
 using namespace cv;
-using namespace boost;
 
-string image_file_name = "orl_faces/s1/1.pgm";
+string image_file_name = "data/orl_faces/s1/1.pgm";
 
 void showImg(Mat image){
 	   	namedWindow("MyWindow", CV_WINDOW_AUTOSIZE); //create a window with the name "MyWindow"
@@ -25,25 +23,29 @@ void showImg(Mat image){
 	    destroyWindow("MyWindow"); //destroy the window with the name, "MyWindow"
 }
 
+void printMat(Mat image){
+	for (int i = 0; i < image.rows; i++){
+		for (int j = 0; j < image.cols; j++)
+			cout << image.at<int>(i, j) << " ";
+		cout << "\n";
+	}
+}
+
 int main(){
     Mat image;
 	image = imread(image_file_name, CV_LOAD_IMAGE_GRAYSCALE);
-
-	int no_rows = image.rows;
-	int no_cols = image.cols;
-
-	cout << image.at<uchar>(0,1) << "\n";
-
-	cout << "no_rows: " << no_rows << "\n";
-	cout << "no_cols: " << no_cols << "\n";
-
 	image.convertTo(image, CV_32F, 1.0/255);
 
 	// showImg(image);
 
+	Mat S, U, Vt;
+	SVD::compute(image, S, U, Vt);
 
-	Mat S, U, V;
-	SVD::compute(image, S, U, V);
+	cout << U.rows << " " << U.cols << "\n";
+	cout << Vt.rows << " " << Vt.cols << "\n";
+
+	// printMat(U.mul(Vt));
+
 
 	return 0;
 }
