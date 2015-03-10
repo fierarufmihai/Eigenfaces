@@ -41,10 +41,12 @@ int main(){
 	Mat S, U, Vt;
 	SVD::compute(image, S, U, Vt);
 
+
+	cout << S.rows << " " << S.cols << "\n";
 	cout << U.rows << " " << U.cols << "\n";
 	cout << Vt.rows << " " << Vt.cols << "\n";
 
-	printMat(U.mul(Vt));
+	printMat(S);
 
 
 	return 0;
