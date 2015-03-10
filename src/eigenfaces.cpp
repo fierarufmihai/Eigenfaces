@@ -12,7 +12,7 @@
 using namespace std;
 using namespace cv;
 
-string image_file_name = "data/orl_faces/s1/1.pgm";
+string image_file_name = "../data/orl_faces/s1/1.pgm";
 
 void showImg(Mat image){
 	   	namedWindow("MyWindow", CV_WINDOW_AUTOSIZE); //create a window with the name "MyWindow"
@@ -44,7 +44,7 @@ int main(){
 	cout << U.rows << " " << U.cols << "\n";
 	cout << Vt.rows << " " << Vt.cols << "\n";
 
-	// printMat(U.mul(Vt));
+	printMat(U.mul(Vt));
 
 
 	return 0;
