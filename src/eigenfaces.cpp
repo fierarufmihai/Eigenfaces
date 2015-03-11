@@ -145,21 +145,11 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 		hconcat(L, image, L);
 	}
 
-	cout << L.rows << " " << L.cols << "\n";
 
 	reduce(L.t(), avgImage, 0, CV_REDUCE_SUM, CV_32F);
-	avgImage = avgImage.t() / no_cols;
-
-	cout << avgImage.rows << " " << avgImage.cols << "\n";
-
-
+	avgImage = avgImage.t() / inputData.xTrain.size();
 	avgImage = avgImage.reshape(0, no_rows);
-
-	cout << avgImage.rows << " " << avgImage.cols << "\n";
-
 	showImg(avgImage);
-
-	// cout << avgImage.rows << " " << avgImage.cols << "\n";
 
 
 
