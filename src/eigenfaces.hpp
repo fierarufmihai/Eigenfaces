@@ -105,4 +105,9 @@ std::vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirst
 
 unsigned int calculateEnergyCutoff(cv::Mat sigma);
 
+
+float computeAccuracy(vector<string> true_Y, vector<string> predicted_Y);
+
+
+
 #endif
