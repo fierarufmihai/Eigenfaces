@@ -146,49 +146,58 @@ unsigned int calculateEnergyCutoff(cv::Mat sigma)
 	}
 }
 
+Mat getLfromMatVector(vector<Mat> x){
+	Mat L, avgL, image, avgImage;
+	int no_rows, no_cols;
 
-vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
-	vector<int> yTest;
-	Mat L, avgL, image, avgImage, W;
-	int no_rows, no_cols, k;
-		
-	image = inputData.xTrain[0];
+	image = x[0];
 	no_rows = image.rows;
 	no_cols = image.cols;
 
 	L = image.reshape(1, no_rows * no_cols);
 
-	for (int i = 1; i < inputData.xTrain.size(); i++){
-		image = inputData.xTrain[i];
+	for (int i = 1; i < x.size(); i++){
+		image = x[i];
 		image = image.reshape(0, no_rows * no_cols);
 		hconcat(L, image, L);
 	}
 
 	reduce(L.t(), avgImage, 0, CV_REDUCE_SUM, CV_32F);
-	avgImage = avgImage.t() / inputData.xTrain.size();
+	avgImage = avgImage.t() / x.size();
 
 	avgL = avgImage;
-	for (int i = 1; i < inputData.xTrain.size(); i++){
+	for (int i = 1; i < x.size(); i++){
 		hconcat(avgL, avgImage, avgL);
 	}
 	L = L - avgL;
+	return L;
+}
+
+
+vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
+	vector<int> yTest;
+	Mat L_training, W_training, L_testing, W_testing;
+	int k;
+		
+	L_training = getLfromMatVector(inputData.xTrain);
 
 	// Apply SVD 
 	Mat S, U, Vt;
-	SVD::compute(L, S, U, Vt);
+	SVD::compute(L_training, S, U, Vt);
 
-	// Remove eigenfaces
-	cout << U.rows << " " << U.cols << "\n";
+	// Reduce U
 	k = calculateEnergyCutoff(S);
 	if (useFirstEigenface)
 		U = U.colRange(0, k);
 	else
 		U = U.colRange(1, k);
-	cout << U.rows << " " << U.cols << "\n";
 
-	W = U.t() * L;
+	W_training = U.t() * L_training;
 
-	cout << W.rows << " " << W.cols << "\n";
+	L_testing = getLfromMatVector(inputData.xTest);
+	W_testing = U.t() * L_testing;
+
+
 
 
 	return yTest;
