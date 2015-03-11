@@ -1,3 +1,12 @@
+/**
+ * 	Project 1
+ * 	Authors: Alina Dima & Mihai Fieraru
+ * 	
+ * 	eigenfaces.cpp
+ */
+
+#include "eigenfaces.hpp"
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -5,37 +14,8 @@
 #include <stdio.h>
 #include <dirent.h>
 
-
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
-
 using namespace std;
 using namespace cv;
-
-
-string image_file_name = "../data/orl_faces/s1/1.pgm";
-const int BUFFER_LENGTH = 1024;
-
-
-struct dataTrainTest{
-	vector<Mat> xTrain;
-	vector<string> yTrain;
-	vector<Mat> xTest;
-};
-
-
-struct dataset{
-	vector<Mat> x;
-	vector<string> y;
-	int noCategories;
-};
-
-
-struct sample{
-	dataTrainTest inputData;
-	vector<string> outputData;
-};
 
 
 int myRandomFn (int i){
@@ -151,51 +131,3 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	return yTest;
 }
 
-
-
-int main(){
-	std::srand ( unsigned ( time(0) ) );
-
-
-	// // showImg(image);
-
-	// Mat S, U, Vt;
-	// SVD::compute(image, S, U, Vt);
-
-
-	// cout << S.rows << " " << S.cols << "\n";
-	// cout << U.rows << " " << U.cols << "\n";
-	// cout << Vt.rows << " " << Vt.cols << "\n";
-
-	// printMat(S);
-
-
-
-
-	// Test readData()
-
-	dataset myDataset = readData("orl_faces");
-	// showImg(data.x[0]);
-	// cout << data.y[0] << "\n";
-	// showImg(data.x[12]);
-	// cout << data.y[12] << "\n";
-	// cout << data.noCategories << "\n";
-	// cout << data.y.size() << "\n";
-
-
-	// Test sampleData()
-
-	// sample mySample = sampleData(myDataset);
-	// showImg(mySample.inputData.xTrain[0]);
-	// cout << mySample.inputData.yTrain[0] << "\n";
-
-	// showImg(mySample.inputData.xTrain[1]);
-	// cout << mySample.inputData.yTrain[1] << "\n";
-
-	// showImg(mySample.inputData.xTrain[6]);
-	// cout << mySample.inputData.yTrain[6] << "\n";
-
-
-
-	return 0;
-}

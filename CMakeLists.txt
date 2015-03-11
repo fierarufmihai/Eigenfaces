@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
-project( eigenfaces )
+project( Eigenfaces )
 find_package(OpenCV REQUIRED)
-add_executable(eigenfaces src/eigenfaces.cpp)
-target_link_libraries(eigenfaces ${OpenCV_LIBS})
+
+add_library (eigenfaces src/eigenfaces.cpp)
+add_executable(main src/main.cpp)
+
+target_link_libraries(main ${OpenCV_LIBS})
+target_link_libraries(main eigenfaces)
