@@ -101,4 +101,8 @@ void printMat(cv::Mat image);
 std::vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface);
 
 
+
+
+unsigned int calculateEnergyCutoff(cv::Mat sigma);
+
 #endif

@@ -125,6 +125,27 @@ void printMat(Mat image){
 	}
 }
 
+unsigned int calculateEnergyCutoff(cv::Mat sigma)
+{
+	float totalEnergy = 0;
+	float energy = 0;
+	unsigned int k = 0;
+
+	for (int i = 0; i < sigma.rows; i++)
+	{
+		totalEnergy += sigma.at<float>(i, 0);
+	}
+
+	for (int i = 0; i < sigma.rows; i++)
+	{
+		energy += sigma.at<float>(i, 0);
+		if ((energy / totalEnergy) > 0.85)
+		{
+			return i;
+		}
+	}
+}
+
 
 vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<int> yTest;
@@ -156,6 +177,8 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	Mat S, U, Vt;
 	SVD::compute(L, S, U, Vt);
 
+	unsigned int k = calculateEnergyCutoff(S);
+	cout << k << endl;
 
 	return yTest;
 }
