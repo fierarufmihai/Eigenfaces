@@ -125,11 +125,10 @@ void printMat(Mat image){
 	}
 }
 
-unsigned int calculateEnergyCutoff(cv::Mat sigma)
+unsigned int calculateEnergyCutoff(Mat sigma)
 {
 	float totalEnergy = 0;
 	float energy = 0;
-	unsigned int k = 0;
 
 	for (int i = 0; i < sigma.rows; i++)
 	{
@@ -144,6 +143,9 @@ unsigned int calculateEnergyCutoff(cv::Mat sigma)
 			return i;
 		}
 	}
+
+	perror("Could not calculate energy cutoff\n");
+	exit(EXIT_FAILURE);
 }
 
 Mat getLfromMatVector(vector<Mat> x){
@@ -156,7 +158,7 @@ Mat getLfromMatVector(vector<Mat> x){
 
 	L = image.reshape(1, no_rows * no_cols);
 
-	for (int i = 1; i < x.size(); i++){
+	for (unsigned int i = 1; i < x.size(); i++){
 		image = x[i];
 		image = image.reshape(0, no_rows * no_cols);
 		hconcat(L, image, L);
@@ -166,16 +168,34 @@ Mat getLfromMatVector(vector<Mat> x){
 	avgImage = avgImage.t() / x.size();
 
 	avgL = avgImage;
-	for (int i = 1; i < x.size(); i++){
+	for (unsigned int i = 1; i < x.size(); i++){
 		hconcat(avgL, avgImage, avgL);
 	}
 	L = L - avgL;
 	return L;
 }
 
+int findBestMatch(Mat W, Mat Wtest)
+{
+	double bestScore = Wtest.dot(W.col(0));
+	int bestMatch = 0;
 
-vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
-	vector<int> yTest;
+	for (int i = 1; i < W.cols; i ++)
+	{
+		double score = Wtest.dot(W.col(i));
+		if (score < bestScore)
+		{
+			bestMatch = i;
+			bestScore = score;
+		}
+	}
+
+	return bestMatch;
+}
+
+
+vector<string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
+	vector<string> yTest;
 	Mat L_training, W_training, L_testing, W_testing;
 	int k;
 		
@@ -197,8 +217,16 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	L_testing = getLfromMatVector(inputData.xTest);
 	W_testing = U.t() * L_testing;
 
+	for (int i = 0; i < W_testing.cols; i++)
+	{
+		int bestMatch = findBestMatch(W_training, W_testing.col(i));
+		yTest.push_back(inputData.yTrain[bestMatch]);
+	}
 
-
+	for (int i = 0; i < W_testing.cols; i++)
+	{
+		cout << yTest[i] << endl;
+	}
 
 	return yTest;
 }

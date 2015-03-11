@@ -98,11 +98,29 @@ void printMat(cv::Mat image);
 /**
  * 
  */
-std::vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface);
+std::vector<std::string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface);
 
 
 
-
+/**
+ * [calculateEnergyCutoff description]
+ * @param  sigma [description]
+ * @return       [description]
+ */
 unsigned int calculateEnergyCutoff(cv::Mat sigma);
+
+
+/**
+ * [findBestMatch description]
+ * @param  W     [description]
+ * @param  Wtest [description]
+ * @return       [description]
+ */
+int findBestMatch(cv::Mat W, cv::Mat Wtest);
+
+
+
+
+
 
 #endif
