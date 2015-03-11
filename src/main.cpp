@@ -53,7 +53,7 @@ int main(){
 
 	// Test sampleData()
 
-	// sample mySample = sampleData(myDataset);
+	sample mySample = sampleData(myDataset);
 	// showImg(mySample.inputData.xTrain[0]);
 	// cout << mySample.inputData.yTrain[0] << "\n";
 
@@ -62,6 +62,10 @@ int main(){
 
 	// showImg(mySample.inputData.xTrain[6]);
 	// cout << mySample.inputData.yTrain[6] << "\n";
+
+
+	eigenFaces(mySample.inputData, 0.85, true);
+
 
 	return 0;
 }

@@ -128,6 +128,29 @@ void printMat(Mat image){
 
 vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<int> yTest;
+	Mat L;
+	Mat image;
+	Mat avgImage;
+		
+	image = inputData.xTrain[0];
+	L = image.reshape(1, image.rows * image.cols);
+
+	for (int i = 1; i < inputData.xTrain.size(); i++){
+		image = inputData.xTrain[i];
+		image = image.reshape(1, image.rows * image.cols);
+		hconcat(L, image, L);
+	}
+
+	cout << L.rows << " " << L.cols << "\n";
+	
+	
+	// reduce(L.t(), avgImage, 0, CV_REDUCE_SUM, CV_32F);
+	// avgImage = avgImage.t();
+	// cout << avgImage.rows << " " << avgImage.cols << "\n";
+
+
+
+
 	return yTest;
 }
 
