@@ -120,7 +120,7 @@ void showImg(Mat image){
 void printMat(Mat image){
 	for (int i = 0; i < image.rows; i++){
 		for (int j = 0; j < image.cols; j++)
-			cout << image.at<int>(i, j) << " ";
+			cout << image.at<float>(i, j) << " ";
 		cout << "\n";
 	}
 }
@@ -131,21 +131,34 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	Mat L;
 	Mat image;
 	Mat avgImage;
+	int no_rows, no_cols;
 		
 	image = inputData.xTrain[0];
-	L = image.reshape(1, image.rows * image.cols);
+	no_rows = image.rows;
+	no_cols = image.cols;
+
+	L = image.reshape(1, no_rows * no_cols);
 
 	for (int i = 1; i < inputData.xTrain.size(); i++){
 		image = inputData.xTrain[i];
-		image = image.reshape(1, image.rows * image.cols);
+		image = image.reshape(0, no_rows * no_cols);
 		hconcat(L, image, L);
 	}
 
 	cout << L.rows << " " << L.cols << "\n";
-	
-	
-	// reduce(L.t(), avgImage, 0, CV_REDUCE_SUM, CV_32F);
-	// avgImage = avgImage.t();
+
+	reduce(L.t(), avgImage, 0, CV_REDUCE_SUM, CV_32F);
+	avgImage = avgImage.t() / no_cols;
+
+	cout << avgImage.rows << " " << avgImage.cols << "\n";
+
+
+	avgImage = avgImage.reshape(0, no_rows);
+
+	cout << avgImage.rows << " " << avgImage.cols << "\n";
+
+	showImg(avgImage);
+
 	// cout << avgImage.rows << " " << avgImage.cols << "\n";
 
 
