@@ -121,6 +121,9 @@ int findBestMatch(cv::Mat W, cv::Mat Wtest);
 
 
 
+float computeAccuracy(std::vector<std::string> true_Y, std::vector<std::string> predicted_Y);
+
+
 
 
 #endif

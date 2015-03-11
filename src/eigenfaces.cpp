@@ -194,6 +194,16 @@ int findBestMatch(Mat W, Mat Wtest)
 }
 
 
+
+float computeAccuracy(vector<string> true_Y, vector<string> predicted_Y){
+	int matches = 0;
+	for (unsigned int i = 0; i < true_Y.size(); i++)
+		if (true_Y[i] == predicted_Y[i])
+			matches++;
+	return float(matches) / float(true_Y.size());
+}
+
+
 vector<string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<string> yTest;
 	Mat L_training, W_training, L_testing, W_testing;
