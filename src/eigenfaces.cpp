@@ -154,7 +154,7 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 
 
 int main(){
-	std::srand ( unsigned ( std::time(0) ) );
+	std::srand ( unsigned ( time(0) ) );
 
 
 	// // showImg(image);
