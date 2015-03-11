@@ -150,20 +150,11 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	for (int i = 1; i < inputData.xTrain.size(); i++){
 		hconcat(avgL, avgImage, avgL);
 	}
-
-	cout << L.rows << " " << L.cols << "\n";
-	cout << avgL.rows << " " << avgL.cols << "\n";
-
 	L = L - avgL;
 
-	cout << L.col(0).rows << " " << L.col(0).cols << "\n";
-
-	Mat i1;
-	i1.copyTo(L.col(0));
-	cout << i1.rows << " " << i1.cols << "\n";
-	i1 = i1.reshape(0, no_rows);
-	showImg(i1);
-
+	// Apply SVD 
+	Mat S, U, Vt;
+	SVD::compute(L, S, U, Vt);
 
 
 	return yTest;
