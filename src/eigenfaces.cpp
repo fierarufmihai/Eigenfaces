@@ -128,8 +128,8 @@ void printMat(Mat image){
 
 vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<int> yTest;
-	Mat L, avgL, image, avgImage;
-	int no_rows, no_cols;
+	Mat L, avgL, image, avgImage, W;
+	int no_rows, no_cols, k;
 		
 	image = inputData.xTrain[0];
 	no_rows = image.rows;
@@ -156,6 +156,18 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	Mat S, U, Vt;
 	SVD::compute(L, S, U, Vt);
 
+	// Remove eigenfaces
+	cout << U.rows << " " << U.cols << "\n";
+	k = 5;
+	if (useFirstEigenface)
+		U = U.colRange(0, k);
+	else
+		U = U.colRange(1, k);
+	cout << U.rows << " " << U.cols << "\n";
+
+	W = U.t() * L;
+
+	cout << W.rows << " " << W.cols << "\n";
 
 	return yTest;
 }
