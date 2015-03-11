@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <dirent.h>
 
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -16,17 +17,51 @@ using namespace cv;
 string image_file_name = "../data/orl_faces/s1/1.pgm";
 const int BUFFER_LENGTH = 1024;
 
+
 struct dataTrainTest{
 	vector<Mat> xTrain;
-	vector<int> yTrain;
+	vector<string> yTrain;
 	vector<Mat> xTest;
 };
+
 
 struct dataset{
 	vector<Mat> x;
 	vector<string> y;
 	int noCategories;
 };
+
+
+struct sample{
+	dataTrainTest inputData;
+	vector<string> outputData;
+};
+
+
+int myRandomFn (int i){
+	return rand() % i;
+}
+
+
+sample sampleData(dataset myDataset){
+	sample mySample;
+	vector<int> myVector;
+	for (int categ = 0; categ < 40; categ++){
+		for (int i = 0; i < 10; i++) 
+			myVector.push_back(i);
+		std::random_shuffle (myVector.begin(), myVector.end(), myRandomFn);
+		for (int i = 0; i < 6; i++){
+			mySample.inputData.xTrain.push_back(myDataset.x[categ * 10 + myVector[i]]);
+			mySample.inputData.yTrain.push_back(myDataset.y[categ * 10 + myVector[i]]);
+		}
+		for (int i = 6; i < 10; i++){
+			mySample.inputData.xTest.push_back(myDataset.x[categ * 10 + myVector[i]]);
+			mySample.outputData.push_back(myDataset.y[categ * 10 + myVector[i]]);
+		}
+		myVector.clear();
+	}
+	return mySample;
+}
 
 
 dataset readData(string datasetName){
@@ -91,6 +126,7 @@ dataset readData(string datasetName){
 	return data;
 }
 
+
 void showImg(Mat image){
 	   	namedWindow("MyWindow", CV_WINDOW_AUTOSIZE); //create a window with the name "MyWindow"
 	    imshow("MyWindow", image); //display the image which is stored in the 'image' in the "MyWindow" window
@@ -100,6 +136,7 @@ void showImg(Mat image){
 	    destroyWindow("MyWindow"); //destroy the window with the name, "MyWindow"
 }
 
+
 void printMat(Mat image){
 	for (int i = 0; i < image.rows; i++){
 		for (int j = 0; j < image.cols; j++)
@@ -108,12 +145,16 @@ void printMat(Mat image){
 	}
 }
 
-vector<int> eigenFaces(dataTrainTest data, float energy, bool useFirstEigenface){
+
+vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<int> yTest;
 	return yTest;
 }
 
+
+
 int main(){
+	std::srand ( unsigned ( std::time(0) ) );
 
 
 	// // showImg(image);
@@ -127,13 +168,34 @@ int main(){
 	// cout << Vt.rows << " " << Vt.cols << "\n";
 
 	// printMat(S);
-	dataset data = readData("orl_faces");
+
+
+
+
+	// Test readData()
+
+	dataset myDataset = readData("orl_faces");
 	// showImg(data.x[0]);
 	// cout << data.y[0] << "\n";
 	// showImg(data.x[12]);
 	// cout << data.y[12] << "\n";
 	// cout << data.noCategories << "\n";
 	// cout << data.y.size() << "\n";
+
+
+	// Test sampleData()
+
+	// sample mySample = sampleData(myDataset);
+	// showImg(mySample.inputData.xTrain[0]);
+	// cout << mySample.inputData.yTrain[0] << "\n";
+
+	// showImg(mySample.inputData.xTrain[1]);
+	// cout << mySample.inputData.yTrain[1] << "\n";
+
+	// showImg(mySample.inputData.xTrain[6]);
+	// cout << mySample.inputData.yTrain[6] << "\n";
+
+
 
 	return 0;
 }
