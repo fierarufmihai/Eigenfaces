@@ -86,45 +86,41 @@ CELEB_PATH = "../data/celeb/"
 
 if __name__ == "__main__":
   image =  Image.open(RAW_PATH + "im1m.jpg")
-  CropFace(image, eye_left=(342,662), eye_right=(616,670), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im1m.jpg")
+  CropFace(image, eye_left=(342,662), eye_right=(616,670), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im1m.jpg")
 
   image =  Image.open(RAW_PATH + "im2m.jpg")
-  CropFace(image, eye_left=(450,262), eye_right=(563,275), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im2m.jpg")
+  CropFace(image, eye_left=(450,262), eye_right=(563,275), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im2m.jpg")
 
   image =  Image.open(RAW_PATH + "im3m.jpg")
-  CropFace(image, eye_left=(735,798), eye_right=(1038,804), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im3m.jpg")
+  CropFace(image, eye_left=(735,798), eye_right=(1038,804), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im3m.jpg")
 
   image =  Image.open(RAW_PATH + "im4m.jpg")
-  CropFace(image, eye_left=(312,376), eye_right=(460,373), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im4m.jpg")
+  CropFace(image, eye_left=(312,376), eye_right=(460,373), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im4m.jpg")
 
   image =  Image.open(RAW_PATH + "im5m.jpg")
-  CropFace(image, eye_left=(170,120), eye_right=(215,120), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im5m.jpg")
+  CropFace(image, eye_left=(170,120), eye_right=(215,120), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im5m.jpg")
 
   image =  Image.open(RAW_PATH + "im1f.jpg")
-  CropFace(image, eye_left=(463,359), eye_right=(601,360), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im1f.jpg")
+  CropFace(image, eye_left=(463,359), eye_right=(601,360), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im1f.jpg")
 
   image =  Image.open(RAW_PATH + "im2f.jpg")
-  CropFace(image, eye_left=(372,568), eye_right=(605,565), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im2f.jpg")
+  CropFace(image, eye_left=(372,568), eye_right=(605,565), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im2f.jpg")
 
   image =  Image.open(RAW_PATH + "im3f.jpg")
-  CropFace(image, eye_left=(426,400), eye_right=(583,396), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im3f.jpg")
+  CropFace(image, eye_left=(426,400), eye_right=(583,396), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im3f.jpg")
 
   image =  Image.open(RAW_PATH + "im4f.jpg")
-  CropFace(image, eye_left=(123,109), eye_right=(167,112), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im4f.jpg")
+  CropFace(image, eye_left=(123,109), eye_right=(167,112), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im4f.jpg")
 
   image =  Image.open(RAW_PATH + "im5f.jpg")
-  CropFace(image, eye_left=(197,208), eye_right=(258,209), offset_pct=(0.25,0.25), dest_sz=(92,112)).save(CELEB_PATH + "im5f.jpg")
-
-  # CropFace(image, eye_left=(252,364), eye_right=(420,366), offset_pct=(0.1,0.1), dest_sz=(200,200)).save("arnie_10_10_200_200.jpg")
-  # CropFace(image, eye_left=(252,364), eye_right=(420,366), offset_pct=(0.2,0.2), dest_sz=(200,200)).save("arnie_20_20_200_200.jpg")
-  # CropFace(image, eye_left=(252,364), eye_right=(420,366), offset_pct=(0.3,0.3), dest_sz=(200,200)).save("arnie_30_30_200_200.jpg")
-  # CropFace(image, eye_left=(252,364), eye_right=(420,366), offset_pct=(0.2,0.2)).save("arnie_20_20_70_70.jpg")
+  CropFace(image, eye_left=(197,208), eye_right=(258,209), offset_pct=(0.3,0.3), dest_sz=(92,112)).save(CELEB_PATH + "im5f.jpg")
 
   ###################################
   # Download links for images 
   ###################################
   # Download the images form the links and save them as indicated in 
-  # the folder preprocessing/raw
+  # the folder data/raw
+  # Additionally, create folder data/celeb 
   # 
   # Males saved as (im#(number)m.jpg) : im1m.jpg -> im5m.jpg 
   # http://static4.wikia.nocookie.net/__cb20130808202627/marvelmovies/images/e/ee/Brad-Pitt.jpg
