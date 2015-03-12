@@ -40,7 +40,7 @@ vector<Mat> getXTest(){
 
 vector<Mat> getXfromIndex(vector<int> predictedIndex, dataTrainTest inputData){
 	vector<Mat> predicted_X;
-	for (int i = 0; i < predictedIndex.size(); i++)
+	for (unsigned int i = 0; i < predictedIndex.size(); i++)
 		predicted_X.push_back(inputData.xTrain[predictedIndex[i]]);
 	return predicted_X;
 }
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
 	vector<Mat> predicted_X = getXfromIndex(predictedIndex, mySample.inputData);
 
 	Mat both;
-	for (int i = 0; i < predicted_X.size(); i++){
+	for (unsigned int i = 0; i < predicted_X.size(); i++){
 		both = mySample.inputData.xTest[i];
 		hconcat(both, predicted_X[i], both);
 		showImg(both);
