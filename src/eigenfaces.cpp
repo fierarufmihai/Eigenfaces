@@ -125,7 +125,7 @@ void printMat(Mat image){
 	}
 }
 
-unsigned int calculateEnergyCutoff(Mat sigma)
+unsigned int calculateEnergyCutoff(Mat sigma, float desiredEnergy)
 {
 	float totalEnergy = 0;
 	float energy = 0;
@@ -138,7 +138,7 @@ unsigned int calculateEnergyCutoff(Mat sigma)
 	for (int i = 0; i < sigma.rows; i++)
 	{
 		energy += sigma.at<float>(i, 0);
-		if ((energy / totalEnergy) > 0.85)
+		if ((energy / totalEnergy) > desiredEnergy)
 		{
 			return i;
 		}
@@ -210,6 +210,19 @@ float computeAccuracy(vector<string> true_Y, vector<string> predicted_Y){
 	return float(matches) / float(true_Y.size());
 }
 
+svd_return svd_processing(dataTrainTest inputData)
+{
+	Mat L_training = getLfromMatVector(inputData.xTrain);
+	Mat S, U, Vt;
+	SVD::compute(L_training, S, U, Vt);
+
+	svd_return ret;
+	ret.S = S;
+	ret.U = U;
+	ret.L_training = L_training;
+	return ret;
+}
+
 
 vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<int> predictedIndex;
@@ -223,7 +236,7 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 	SVD::compute(L_training, S, U, Vt);
 
 	// Reduce U
-	k = calculateEnergyCutoff(S);
+	k = calculateEnergyCutoff(S, energy);
 	if (useFirstEigenface)
 		U = U.colRange(0, k);
 	else
@@ -246,7 +259,7 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 
 vector<string> getYfromIndex(vector<int> predictedIndex, dataTrainTest inputData){
 	vector<string> predicted_Y;
-	for (int i = 0; i < predictedIndex.size(); i++)
+	for (unsigned int i = 0; i < predictedIndex.size(); i++)
 		predicted_Y.push_back(inputData.yTrain[predictedIndex[i]]);
 	return predicted_Y;
 }

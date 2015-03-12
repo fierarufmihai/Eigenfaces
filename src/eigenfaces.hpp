@@ -49,6 +49,12 @@ struct sample{
 	std::vector<std::string> outputData;
 };
 
+struct svd_return{
+	cv::Mat L_training;
+	cv::Mat U;
+	cv::Mat S;
+};
+
 
 
 /**************************************************
@@ -125,6 +131,7 @@ int findBestMatch(cv::Mat W, cv::Mat Wtest);
 float computeAccuracy(std::vector<std::string> true_Y, std::vector<std::string> predicted_Y);
 
 
+svd_return svd_processing(dataTrainTest inputData);
 
 
 #endif
