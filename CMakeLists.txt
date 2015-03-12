@@ -9,3 +9,11 @@ add_definitions(-Wall)
 
 target_link_libraries(main ${OpenCV_LIBS})
 target_link_libraries(main eigenfaces)
+
+
+
+add_executable(celeb src/celeb.cpp)
+
+add_definitions(-Wall)
+target_link_libraries(celeb ${OpenCV_LIBS})
+target_link_libraries(celeb eigenfaces)

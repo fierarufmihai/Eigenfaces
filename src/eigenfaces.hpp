@@ -98,8 +98,9 @@ void printMat(cv::Mat image);
 /**
  * 
  */
-std::vector<std::string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface);
+std::vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface);
 
+std::vector<std::string> getYfromIndex(std::vector<int> predictedIndex, dataTrainTest inputData);
 
 
 /**

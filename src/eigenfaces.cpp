@@ -211,8 +211,8 @@ float computeAccuracy(vector<string> true_Y, vector<string> predicted_Y){
 }
 
 
-vector<string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
-	vector<string> yTest;
+vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
+	vector<int> predictedIndex;
 	Mat L_training, W_training, L_testing, W_testing;
 	int k;
 		
@@ -237,9 +237,19 @@ vector<string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEi
 	for (int i = 0; i < W_testing.cols; i++)
 	{
 		int bestMatch = findBestMatch(W_training, W_testing.col(i));
-		yTest.push_back(inputData.yTrain[bestMatch]);
+		predictedIndex.push_back(bestMatch);
 	}
 
-	return yTest;
+	return predictedIndex;
 }
+
+
+vector<string> getYfromIndex(vector<int> predictedIndex, dataTrainTest inputData){
+	vector<string> predicted_Y;
+	for (int i = 0; i < predictedIndex.size(); i++)
+		predicted_Y.push_back(inputData.yTrain[predictedIndex[i]]);
+	return predicted_Y;
+}
+
+
 
