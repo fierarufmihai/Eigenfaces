@@ -233,11 +233,6 @@ vector<string> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEi
 		yTest.push_back(inputData.yTrain[bestMatch]);
 	}
 
-	for (int i = 0; i < W_testing.cols; i++)
-	{
-		cout << yTest[i] << endl;
-	}
-
 	return yTest;
 }
 

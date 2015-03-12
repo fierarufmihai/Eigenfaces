@@ -64,7 +64,15 @@ int main(){
 	// cout << mySample.inputData.yTrain[6] << "\n";
 
 
-	eigenFaces(mySample.inputData, 0.85, true);
+	vector<string> predicted_Y = eigenFaces(mySample.inputData, 0.85, true);
+	vector<string> true_Y = mySample.outputData;
+
+	for (int i = 0; i < predicted_Y.size(); i++){
+		cout << predicted_Y[i] << " " << true_Y[i] << "\n";
+	}
+
+
+	cout << computeAccuracy(true_Y, predicted_Y);
 
 
 	return 0;
