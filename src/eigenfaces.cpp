@@ -175,14 +175,21 @@ Mat getLfromMatVector(vector<Mat> x){
 	return L;
 }
 
+double getScore(Mat u1, Mat u2)
+{
+	Mat u3 = u1 - u2;
+	return u3.dot(u3); // compute norm 
+}
+
+
 int findBestMatch(Mat W, Mat Wtest)
 {
-	double bestScore = Wtest.dot(W.col(0));
+	double bestScore = getScore(W.col(0), Wtest);
 	int bestMatch = 0;
 
 	for (int i = 1; i < W.cols; i ++)
 	{
-		double score = Wtest.dot(W.col(i));
+		double score = getScore(W.col(i), Wtest);
 		if (score < bestScore)
 		{
 			bestMatch = i;
