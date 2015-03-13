@@ -114,7 +114,7 @@ std::vector<std::string> getYfromIndex(std::vector<int> predictedIndex, dataTrai
  * @param  sigma [description]
  * @return       [description]
  */
-unsigned int calculateEnergyCutoff(cv::Mat sigma);
+unsigned int calculateEnergyCutoff(cv::Mat sigma, float desiredEnergy);
 
 
 /**
@@ -128,10 +128,12 @@ int findBestMatch(cv::Mat W, cv::Mat Wtest);
 
 
 
-float computeAccuracy(std::vector<std::string> true_Y, std::vector<std::string> predicted_Y);
+float computeAccuracy(std::vector<std::string> &true_Y, std::vector<std::string> &predicted_Y);
 
 
 svd_return svd_processing(dataTrainTest inputData);
 
+
+cv::Mat getLfromMatVector(std::vector<cv::Mat> x);
 
 #endif

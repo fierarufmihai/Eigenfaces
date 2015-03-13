@@ -202,11 +202,17 @@ int findBestMatch(Mat W, Mat Wtest)
 
 
 
-float computeAccuracy(vector<string> true_Y, vector<string> predicted_Y){
+float computeAccuracy(vector<string> &true_Y, vector<string> &predicted_Y){
 	int matches = 0;
+
 	for (unsigned int i = 0; i < true_Y.size(); i++)
-		if (true_Y[i] == predicted_Y[i])
+	{
+		// cout << i << "\t" << true_Y[i] << endl;
+		// cout << i << "\t" << predicted_Y.size() << endl;
+		if (true_Y[i] == predicted_Y[i]){
 			matches++;
+		}
+	}
 	return float(matches) / float(true_Y.size());
 }
 
