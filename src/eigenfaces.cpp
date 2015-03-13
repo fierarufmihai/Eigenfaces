@@ -14,16 +14,22 @@
 #include <stdio.h>
 #include <dirent.h>
 
+#include <algorithm>
+#include <map>
+
 using namespace std;
 using namespace cv;
 
 
-int myRandomFn (int i){
+int 
+myRandomFn (int i){
 	return rand() % i;
 }
 
 
-sample sampleData(dataset myDataset){
+
+sample 
+sampleData(dataset myDataset){
 	sample mySample;
 	vector<int> myVector;
 	for (int categ = 0; categ < 40; categ++){
@@ -44,7 +50,9 @@ sample sampleData(dataset myDataset){
 }
 
 
-dataset readData(string datasetName){
+
+dataset 
+readData(string datasetName){
 	dataset data;	
 	DIR *dirDataset;
 	struct dirent *entCategory;
@@ -107,7 +115,9 @@ dataset readData(string datasetName){
 }
 
 
-void showImg(Mat image){
+
+void 
+showImg(Mat image){
 	   	namedWindow("MyWindow", CV_WINDOW_AUTOSIZE); //create a window with the name "MyWindow"
 	    imshow("MyWindow", image); //display the image which is stored in the 'image' in the "MyWindow" window
 
@@ -117,7 +127,9 @@ void showImg(Mat image){
 }
 
 
-void printMat(Mat image){
+
+void 
+printMat(Mat image){
 	for (int i = 0; i < image.rows; i++){
 		for (int j = 0; j < image.cols; j++)
 			cout << image.at<float>(i, j) << " ";
@@ -125,7 +137,10 @@ void printMat(Mat image){
 	}
 }
 
-unsigned int calculateEnergyCutoff(Mat sigma, float desiredEnergy)
+
+
+unsigned int 
+calculateEnergyCutoff(Mat sigma, float desiredEnergy)
 {
 	float totalEnergy = 0;
 	float energy = 0;
@@ -148,7 +163,11 @@ unsigned int calculateEnergyCutoff(Mat sigma, float desiredEnergy)
 	exit(EXIT_FAILURE);
 }
 
-Mat getLfromMatVector(vector<Mat> x){
+
+
+
+Mat 
+getLfromMatVector(vector<Mat> x){
 	Mat L, avgL, image, avgImage;
 	int no_rows, no_cols;
 
@@ -175,14 +194,19 @@ Mat getLfromMatVector(vector<Mat> x){
 	return L;
 }
 
-double getScore(Mat u1, Mat u2)
+
+
+double 
+getScore(Mat u1, Mat u2)
 {
 	Mat u3 = u1 - u2;
 	return u3.dot(u3); // compute norm 
 }
 
 
-int findBestMatch(Mat W, Mat Wtest)
+
+int 
+findBestMatch(Mat W, Mat Wtest)
 {
 	double bestScore = getScore(W.col(0), Wtest);
 	int bestMatch = 0;
@@ -202,13 +226,12 @@ int findBestMatch(Mat W, Mat Wtest)
 
 
 
-float computeAccuracy(vector<string> &true_Y, vector<string> &predicted_Y){
+float 
+computeAccuracy(vector<string> &true_Y, vector<string> &predicted_Y){
 	int matches = 0;
 
 	for (unsigned int i = 0; i < true_Y.size(); i++)
 	{
-		// cout << i << "\t" << true_Y[i] << endl;
-		// cout << i << "\t" << predicted_Y.size() << endl;
 		if (true_Y[i] == predicted_Y[i]){
 			matches++;
 		}
@@ -216,7 +239,10 @@ float computeAccuracy(vector<string> &true_Y, vector<string> &predicted_Y){
 	return float(matches) / float(true_Y.size());
 }
 
-svd_return svd_processing(dataTrainTest inputData)
+
+
+svd_return 
+svd_processing(dataTrainTest inputData)
 {
 	Mat L_training = getLfromMatVector(inputData.xTrain);
 	Mat S, U, Vt;
@@ -230,7 +256,9 @@ svd_return svd_processing(dataTrainTest inputData)
 }
 
 
-vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
+
+vector<int> 
+eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 	vector<int> predictedIndex;
 	Mat L_training, W_training, L_testing, W_testing;
 	int k;
@@ -263,7 +291,9 @@ vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigen
 }
 
 
-vector<string> getYfromIndex(vector<int> predictedIndex, dataTrainTest inputData){
+
+vector<string> 
+getYfromIndex(vector<int> predictedIndex, dataTrainTest inputData){
 	vector<string> predicted_Y;
 	for (unsigned int i = 0; i < predictedIndex.size(); i++)
 		predicted_Y.push_back(inputData.yTrain[predictedIndex[i]]);
@@ -272,3 +302,65 @@ vector<string> getYfromIndex(vector<int> predictedIndex, dataTrainTest inputData
 
 
 
+bool 
+Special_map::compare (Special_map &a, Special_map &b) 
+{ 
+	return ( a.score < b.score); 
+}
+
+
+
+vector <int> 
+findBestMatches(Mat W, Mat Wtest)
+{
+	vector<Special_map> scores;
+	for (int i = 1; i < W.cols; i ++)
+	{
+		scores[i] = Special_map(i, getScore(W.col(i), Wtest));
+	}
+
+	partial_sort (scores.begin(), scores.begin() + 5, scores.end(), Special_map::compare);
+
+	vector<int> bestMatches;
+	for (int i = 1; i < 5; i++)
+	{
+		bestMatches.push_back(scores[i].index);
+	}
+
+	return bestMatches;
+}
+
+
+
+vector<vector<int>> 
+eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenface){
+	vector<vector<int>> predictedIndexes;
+	Mat L_training, W_training, L_testing, W_testing;
+	int k;
+		
+	L_training = getLfromMatVector(inputData.xTrain);
+
+	// Apply SVD 
+	Mat S, U, Vt;
+	SVD::compute(L_training, S, U, Vt);
+
+	// Reduce U
+	k = calculateEnergyCutoff(S, energy);
+	if (useFirstEigenface)
+		U = U.colRange(0, k);
+	else
+		U = U.colRange(1, k);
+
+	W_training = U.t() * L_training;
+
+	L_testing = getLfromMatVector(inputData.xTest);
+	W_testing = U.t() * L_testing;
+
+	for (int i = 0; i < W_testing.cols; i++)
+	{
+		vector<int> bestMatches = findBestMatches(W_training, W_testing.col(i));
+		predictedIndexes.push_back(bestMatches);
+	}
+
+	return predictedIndexes;
+}

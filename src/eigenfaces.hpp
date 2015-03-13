@@ -55,6 +55,16 @@ struct svd_return{
 	cv::Mat S;
 };
 
+class Special_map{
+public:
+	int index;
+	double score;
+
+	Special_map(int index, double score):index(index), score(score) {}
+
+	static bool compare (Special_map &a, Special_map &b); 
+};
+
 
 
 /**************************************************
@@ -102,10 +112,20 @@ void printMat(cv::Mat image);
 
 
 /**
- * 
+ * [eigenFaces description]
+ * @param  inputData         [description]
+ * @param  energy            [description]
+ * @param  useFirstEigenface [description]
+ * @return                   [description]
  */
 std::vector<int> eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface);
 
+
+/**
+ * [getYfromIndex description]
+ * @param predictedIndex [description]
+ * @param inputData      [description]
+ */
 std::vector<std::string> getYfromIndex(std::vector<int> predictedIndex, dataTrainTest inputData);
 
 
@@ -126,14 +146,41 @@ unsigned int calculateEnergyCutoff(cv::Mat sigma, float desiredEnergy);
 int findBestMatch(cv::Mat W, cv::Mat Wtest);
 
 
-
-
+/**
+ * [computeAccuracy description]
+ * @param  true_Y      [description]
+ * @param  predicted_Y [description]
+ * @return             [description]
+ */
 float computeAccuracy(std::vector<std::string> &true_Y, std::vector<std::string> &predicted_Y);
 
 
+/**
+ * [svd_processing description]
+ * @param  inputData [description]
+ * @return           [description]
+ */
 svd_return svd_processing(dataTrainTest inputData);
 
 
+/**
+ * [getLfromMatVector description]
+ * @param  x [description]
+ * @return   [description]
+ */
 cv::Mat getLfromMatVector(std::vector<cv::Mat> x);
+
+
+/**
+ * 
+ */
+std::vector <int> findBestMatches(cv::Mat W, cv::Mat Wtest);
+
+
+
+/**
+ * 
+ */
+std::vector<std::vector<int>> eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenface);
 
 #endif
