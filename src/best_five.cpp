@@ -22,8 +22,8 @@
 using namespace std;
 using namespace cv;
 
-string image_file_name = "../data/orl_faces/s1/1.pgm";
-
+const string image_file_name = "../data/orl_faces/s1/1.pgm";
+const string output_file_name = "../data/celeb_accuracy_scores";
 
 /**
  * Reads the celebrity images in the folder. 
@@ -74,20 +74,41 @@ getXfromIndex(
 
 
 /**
- * Saves the accuracy scores to a file
+ * Saves the accuracy scores to a file.
  * 
- * @param fileName       the name of the file used for storage
+ * @param outputFile       the name of the file used for storage
  * @param  predictedIndex a vector with indexes of images
  * @param  inputData      an inputData structure containing all the labels
  */
-// void 
-// saveDataToFile (
-// 	string fileName,
-// 	vector<int> predictedIndexes, 
-// 	dataTrainTest inputData)
-// {
-// 
-// }
+void 
+saveDataToFile (
+	string outputFile,
+	vector<vector<Special_map>> predictedIndexes, 
+	dataTrainTest inputData)
+{
+	ofstream fout;
+ 	fout.open (outputFile);
+ 	fout << "Accuracy scores\n\n";
+ 	const string gender[] = {"f","m"};
+
+ 	for (unsigned int celebImg = 0; celebImg < predictedIndexes.size(); celebImg ++)
+ 	{
+ 		// Write picture header
+ 		fout << "File: data\\celeb\\im" << (celebImg % 5 + 1);
+ 		fout << gender[celebImg < 5] << ".jpg\n";
+ 		fout << "\t\tRank\tPerson\tAccuracy\n";
+
+ 		for (int predictedIndex = 0; predictedIndex < 5; predictedIndex ++)
+ 		{
+ 			fout << "\t\t" << predictedIndex + 1 <<"\t";
+ 			fout << inputData.yTrain[predictedIndexes[celebImg][predictedIndex].index] << "\t";
+ 			fout << predictedIndexes[celebImg][predictedIndex].score << "\n\n";
+ 		}
+ 	}
+
+
+ 	fout.close();
+}
 
 int 
 main(
@@ -105,7 +126,8 @@ main(
 
 
 	// Apply eignenfaces algorithm and compute accuracy scores
-	vector<vector<int>> predictedIndexes = eigenFaces_firstfive(mySample.inputData, 0.85, true);
+	vector<vector<Special_map>> predictedAccuracies = eigenFaces_firstfive(mySample.inputData, 0.85, true);
+	vector<vector<int>> predictedIndexes = changeFormat(predictedAccuracies);
 	vector<vector<Mat>> predicted_X;
 
 	for (int image = 0; image < 5; image ++)
@@ -114,6 +136,8 @@ main(
 		predicted_X.push_back(predicted_X_number);
 	}
 
+
+	saveDataToFile(output_file_name, predictedAccuracies, mySample.inputData);
 
 	// Display results
 	Mat all_together;

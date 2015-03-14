@@ -271,10 +271,7 @@ eigenFaces(dataTrainTest inputData, float energy, bool useFirstEigenface){
 
 	// Reduce U
 	k = calculateEnergyCutoff(S, energy);
-	if (useFirstEigenface)
-		U = U.colRange(0, k);
-	else
-		U = U.colRange(1, k);
+	U = U.colRange(useFirstEigenface ? 0 : 1 , k);
 
 	W_training = U.t() * L_training;
 
@@ -334,23 +331,29 @@ findBestMatches(Mat W, Mat Wtest)
 
 
 
-vector<int> 
-changeFormat(vector<Special_map> bestMatches_raw)
+vector<vector<int>>
+changeFormat(
+	vector<vector<Special_map>> predictedIndexes_raw)
 {
-	vector<int> bestMatches;
-	for (int i = 0; i < 5; i++)
+	vector<vector<int>> predictedIndexes;
+	for (unsigned int celebImage = 0; celebImage < predictedIndexes_raw.size(); celebImage++)
 	{
-		bestMatches.push_back(bestMatches_raw[i].index);
+		vector<int> temp;
+		for (int matchImageNumber = 0; matchImageNumber < 5; matchImageNumber++)
+		{
+			temp.push_back(predictedIndexes_raw[celebImage][matchImageNumber].index);
+		}
+		predictedIndexes.push_back(temp);
 	}
 
-	return bestMatches;
+	return predictedIndexes;
 }
 
 
 
-vector<vector<int>> 
+vector<vector<Special_map>> 
 eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenface){
-	vector<vector<int>> predictedIndexes;
+	vector<vector<Special_map>> predictedIndexes;
 	Mat L_training, W_training, L_testing, W_testing;
 	int k;
 		
@@ -369,9 +372,8 @@ eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenfa
 
 	for (int i = 0; i < W_testing.cols; i++)
 	{
-		vector<int> bestMatches = changeFormat(findBestMatches(W_training, W_testing.col(i)));
+		vector<Special_map> bestMatches = findBestMatches(W_training, W_testing.col(i));
 		predictedIndexes.push_back(bestMatches);
 	}
-
 	return predictedIndexes;
 }

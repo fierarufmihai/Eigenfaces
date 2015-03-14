@@ -49,11 +49,13 @@ struct sample{
 	std::vector<std::string> outputData;
 };
 
+
 struct svd_return{
 	cv::Mat L_training;
 	cv::Mat U;
 	cv::Mat S;
 };
+
 
 class Special_map{
 public:
@@ -178,9 +180,12 @@ std::vector <Special_map> findBestMatches(cv::Mat W, cv::Mat Wtest);
 
 
 
+std::vector<std::vector<int>> changeFormat(std::vector<std::vector<Special_map>> predictedIndexes_raw);
+
+
 /**
  * 
  */
-std::vector<std::vector<int>> eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenface);
+std::vector<std::vector<Special_map>> eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenface);
 
 #endif
