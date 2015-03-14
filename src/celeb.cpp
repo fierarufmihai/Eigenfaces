@@ -21,8 +21,15 @@ using namespace cv;
 
 string image_file_name = "../data/orl_faces/s1/1.pgm";
 
-
-vector<Mat> getXTest(){
+/**
+ * 
+ */
+/**
+ * [getXTest description]
+ * @return [description]
+ */
+vector<Mat> 
+getXTest(){
 	vector<Mat> xTest;
 	Mat image;
 
@@ -38,7 +45,14 @@ vector<Mat> getXTest(){
 }
 
 
-vector<Mat> getXfromIndex(vector<int> predictedIndex, dataTrainTest inputData){
+/**
+ * [getXfromIndex description]
+ * @param  predictedIndex [description]
+ * @param  inputData      [description]
+ * @return                [description]
+ */
+vector<Mat>
+getXfromIndex (vector<int> predictedIndex, dataTrainTest inputData){
 	vector<Mat> predicted_X;
 	for (unsigned int i = 0; i < predictedIndex.size(); i++)
 		predicted_X.push_back(inputData.xTrain[predictedIndex[i]]);

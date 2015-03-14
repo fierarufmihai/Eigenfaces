@@ -174,7 +174,7 @@ cv::Mat getLfromMatVector(std::vector<cv::Mat> x);
 /**
  * 
  */
-std::vector <int> findBestMatches(cv::Mat W, cv::Mat Wtest);
+std::vector <Special_map> findBestMatches(cv::Mat W, cv::Mat Wtest);
 
 
 

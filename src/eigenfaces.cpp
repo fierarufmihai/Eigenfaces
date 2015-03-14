@@ -310,21 +310,37 @@ Special_map::compare (Special_map &a, Special_map &b)
 
 
 
-vector <int> 
+vector <Special_map> 
 findBestMatches(Mat W, Mat Wtest)
 {
 	vector<Special_map> scores;
 	for (int i = 1; i < W.cols; i ++)
 	{
-		scores[i] = Special_map(i, getScore(W.col(i), Wtest));
+		double score = getScore(W.col(i), Wtest);
+		Special_map sm = Special_map(i, score);
+		scores.push_back(sm);
 	}
 
 	partial_sort (scores.begin(), scores.begin() + 5, scores.end(), Special_map::compare);
 
-	vector<int> bestMatches;
-	for (int i = 1; i < 5; i++)
+	vector<Special_map> bestMatches;
+	for (int i = 0; i < 5; i++)
 	{
-		bestMatches.push_back(scores[i].index);
+		bestMatches.push_back(scores[i]);
+	}
+
+	return bestMatches;
+}
+
+
+
+vector<int> 
+changeFormat(vector<Special_map> bestMatches_raw)
+{
+	vector<int> bestMatches;
+	for (int i = 0; i < 5; i++)
+	{
+		bestMatches.push_back(bestMatches_raw[i].index);
 	}
 
 	return bestMatches;
@@ -339,17 +355,12 @@ eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenfa
 	int k;
 		
 	L_training = getLfromMatVector(inputData.xTrain);
-
 	// Apply SVD 
 	Mat S, U, Vt;
 	SVD::compute(L_training, S, U, Vt);
-
 	// Reduce U
 	k = calculateEnergyCutoff(S, energy);
-	if (useFirstEigenface)
-		U = U.colRange(0, k);
-	else
-		U = U.colRange(1, k);
+	U = U.colRange(useFirstEigenface ? 0 : 1 , k);
 
 	W_training = U.t() * L_training;
 
@@ -358,7 +369,7 @@ eigenFaces_firstfive(dataTrainTest inputData, float energy, bool useFirstEigenfa
 
 	for (int i = 0; i < W_testing.cols; i++)
 	{
-		vector<int> bestMatches = findBestMatches(W_training, W_testing.col(i));
+		vector<int> bestMatches = changeFormat(findBestMatches(W_training, W_testing.col(i)));
 		predictedIndexes.push_back(bestMatches);
 	}
 
