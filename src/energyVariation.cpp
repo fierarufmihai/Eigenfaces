@@ -21,10 +21,26 @@ const string outputFileName = "../data/output.csv";
 const string prefix = "../data/output/output";
 const string suffix = ".csv";
 
-void writeOutput();
-
-void runAccuracyTest(sample & mySample, Mat L_training, Mat U, Mat S, string outputFile)
+/**
+ * Varies energy levels from 15% to 85% and saves the data in the file indicated.
+ * The svd decomposition has already been made, so all images have the same partition 
+ * of train/test pictures.
+ * 
+ * @param mySample   data sample containing labels (needed for accuracy)
+ * @param L_training Precomputed image set
+ * @param U          Precomputed svd U
+ * @param S          Precomputed svd Sigma
+ * @param outputFile 
+ */
+void 
+runAccuracyTest(
+	sample & mySample, 
+	Mat L_training, 
+	Mat U, 
+	Mat S, 
+	string outputFile)
 {
+	// Create a vector of energy values
 	vector<float> energyValues;
 	{
 		float val = 0.85;
@@ -45,7 +61,7 @@ void runAccuracyTest(sample & mySample, Mat L_training, Mat U, Mat S, string out
 	{
 		for (int useFirstEigenface = 0; useFirstEigenface <= 1; useFirstEigenface++)
 		{
-
+			// Reduce U and change basis
 			int k = calculateEnergyCutoff(S, energyValues[index]);
 			Mat Uprime = U.colRange(1 - useFirstEigenface, k);
 			W_training = Uprime.t() * L_training;
@@ -53,6 +69,7 @@ void runAccuracyTest(sample & mySample, Mat L_training, Mat U, Mat S, string out
 			L_testing = getLfromMatVector(mySample.inputData.xTest);
 			W_testing = Uprime.t() * L_testing;
 
+			// calulate best match for each image
 			vector<int> predictedIndex;
 			for (int i = 0; i < W_testing.cols; i++)
 			{
@@ -63,10 +80,10 @@ void runAccuracyTest(sample & mySample, Mat L_training, Mat U, Mat S, string out
 			vector<string> predicted_Y = getYfromIndex(predictedIndex, mySample.inputData);
 			vector<string> true_Y = mySample.outputData;
 
+			// summarize 
 			fout << energyValues[index] << "\t" << std::boolalpha <<  useFirstEigenface << "\t";
 			double acc = computeAccuracy(true_Y, predicted_Y);
 			fout << acc << "\n";
-			// cout << energyValues[index] << "\t" << std::boolalpha <<  useFirstEigenface << "\t" << acc << endl;
 		}
 	}
 
@@ -76,7 +93,8 @@ void runAccuracyTest(sample & mySample, Mat L_training, Mat U, Mat S, string out
 
 
 
-int main()
+int 
+main()
 {
 	std::srand ( unsigned ( time(0) ) );
 
@@ -90,8 +108,6 @@ int main()
 		string outputFile = prefix + to_string(i) + suffix;
 		runAccuracyTest(mySample, svd_result.L_training, svd_result.U, svd_result.S, outputFile);
 	}
-
-
 
 	return 0;
 }

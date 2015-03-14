@@ -24,6 +24,7 @@ add_definitions(-std=c++11)
 target_link_libraries(varyEnergy ${OpenCV_LIBS})
 target_link_libraries(varyEnergy eigenfaces)
 
+
 add_executable(best_five src/best_five.cpp)
 add_definitions(-Wall)
 add_definitions(-std=c++11)
