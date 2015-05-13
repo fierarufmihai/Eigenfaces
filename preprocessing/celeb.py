@@ -81,8 +81,8 @@ def CropFace(image, eye_left=(0,0), eye_right=(0,0), offset_pct=(0.2,0.2), dest_
   image = image.resize(dest_sz, Image.ANTIALIAS)
   return image
 
-RAW_PATH = "../data/raw/"
-CELEB_PATH = "../data/celeb/"
+RAW_PATH = "data/raw/"
+CELEB_PATH = "data/celeb/"
 
 if __name__ == "__main__":
   image =  Image.open(RAW_PATH + "im1m.jpg")
