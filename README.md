@@ -6,7 +6,7 @@
 cd Eigenfaces
 mkdir data/celeb
 mkdir data/raw
-mdkir data/output
+mkdir data/output
 python preprocessing/download.py
 python preprocessing/celeb.py
 rm -rf data/raw
@@ -25,16 +25,17 @@ first eigenvector.
 ```
 ./best_five 
 ```
-
 Takes 10 celebrity pictures and returns the five best matches for each,
 storing the data in the file data/celeb_accuracy_scores, and displaying 5 of the celebrities
 together with the closest matches on the screen
+
 
 ```
 ./celeb 
 ```
 A simplified version of ./best_five, only displaying the best match and without 
 storing the accuracies.
+
 
 ```
 ./varyEnergy
